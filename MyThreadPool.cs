@@ -10,7 +10,7 @@ namespace SPP_5
 
         public int CountOfThreads { get; private set; }
         private Queue<IAction> tasks;
-        private object monitor;
+        private object locker;
         private List<Thread> threads;
         
         public MyThreadPool(int countOfThreads)
@@ -24,7 +24,7 @@ namespace SPP_5
                 throw new ArgumentException("Было получено некорректное значение количества потоков(countOfThreads)");
             }
 
-            monitor = new object();
+            locker = new object();
             tasks = new Queue<IAction>();
             threads = new List<Thread>();
 
@@ -42,7 +42,7 @@ namespace SPP_5
             {
                 if (tasks.Count != 0)
                 {
-                    lock (monitor)
+                    lock (locker)
                     {
                         if (tasks.Count != 0)
                         {
@@ -60,7 +60,7 @@ namespace SPP_5
 
         public void Queue(IAction task)
         {
-            lock (monitor)
+            lock (locker)
             {
                 tasks.Enqueue(task);
             }
