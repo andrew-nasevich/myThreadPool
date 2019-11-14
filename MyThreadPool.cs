@@ -6,7 +6,6 @@ namespace SPP_5
 { 
     class MyThreadPool
     {
-        private const int TIME_OF_SLEEPING = 100;
 
         public int CountOfThreads { get; private set; }
         private Queue<IAction> tasks;
@@ -31,6 +30,7 @@ namespace SPP_5
             for(int i = 0; i <= this.CountOfThreads; i++)
             {
                 Thread thread = new Thread(new ThreadStart(ProcessThread));
+                thread.IsBackground = true;
                 threads.Add(thread);
                 thread.Start();
             }
@@ -53,7 +53,7 @@ namespace SPP_5
                 }
                 else
                 {
-                    Thread.Sleep(TIME_OF_SLEEPING);
+                    Thread.Yield();
                 }
             }
         }
