@@ -6,11 +6,11 @@ namespace SPP_5
 { 
     class MyThreadPool
     {
-
-        public int CountOfThreads { get; private set; }
         private Queue<IAction> tasks;
         private object locker;
         private List<Thread> threads;
+
+        public int CountOfThreads { get; private set; }
         
         public MyThreadPool(int countOfThreads)
         {
@@ -36,8 +36,11 @@ namespace SPP_5
             }
         }
 
+        
         private void ProcessThread()
         {
+            IAction task = null;
+                
             while (true)
             {
                 if (tasks.Count != 0)
@@ -46,9 +49,14 @@ namespace SPP_5
                     {
                         if (tasks.Count != 0)
                         {
-                            IAction task = tasks.Dequeue();
-                            task.Action();
+                            task = tasks.Dequeue();
                         }
+                    }
+                    
+                    if(task != null)
+                    {
+                        task.Action();
+                        task = null;
                     }
                 }
                 else
